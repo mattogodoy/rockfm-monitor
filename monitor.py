@@ -78,7 +78,10 @@ def saveOldHistory(songList):
 
 # Appends a new song to the end of the history file
 def saveNewSong(song):
-  print("New song found: " + song)
+  try:
+    print("New song found: " + song)
+  except Exception as e:
+    print("New song found. Name error: " + str(e))
 
   artistName = song.split(' - ')[0]
   songName = song.split(' - ')[1]
