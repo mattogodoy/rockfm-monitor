@@ -1,6 +1,6 @@
 # RockFM Song Monitor
 
-I have a therory that I want to prove: RockFM Madrid (101.7 FM) plays the same songs over and over, specially Bon Jovi, which they seem to be in love with.
+I have a theory that I want to prove: RockFM Madrid (101.7 FM) plays the same songs over and over, specially Bon Jovi, which they seem to be in love with.
 
 This is a simple Python program that connects to the **radio.es** API, gets the latest played songs and stores them in a CSV file for later analysis.
 

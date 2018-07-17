@@ -1,6 +1,7 @@
 import requests
 import time
 import schedule
+import json
 from os import path
 
 
@@ -17,8 +18,6 @@ def main():
 
 # Add the last non-repeated songs to the history
 def mergeSongs():
-  global newHistory
-
   newHistory = []
   oldHistory = getOldHistory() # Get old history songs
 
@@ -53,7 +52,10 @@ def getLastSongs():
   r = requests.get(url = APIurl, params = APIparams)
 
   # extracting data in json format
-  data = r.json()
+  # data = r.json()
+  data = r.text.encode('utf-8').decode('ascii', 'ignore') # Hack to avoid special characters errors
+  data = json.loads(data)
+
   data = data[::-1] # Reverse the array so the songs are in descending order
   return data
 
@@ -78,10 +80,7 @@ def saveOldHistory(songList):
 
 # Appends a new song to the end of the history file
 def saveNewSong(song):
-  try:
-    print("New song found: " + song)
-  except Exception as e:
-    print("New song found. Name error: " + str(e))
+  print("New song found: " + song)
 
   artistName = song.split(' - ')[0]
   songName = song.split(' - ')[1]
