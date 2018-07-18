@@ -5,8 +5,9 @@ I have a theory that I want to prove: RockFM Madrid (101.7 FM) plays the same so
 This is a simple Python program that connects to the same API used by the oficial online radio, gets the song being played and stores it in a CSV file for later analysis.
 
 - The results are stored in a file called **history.csv**
-- The CSV format of the history file is [artist, song name, date(dd/mm/yyyy), time(hh:mm:ss)]
+- The CSV format of the history file is [son author, song title, date(dd/mm/yyyy), time(hh:mm)]
 - New songs are checked every 20 seconds (just as in the official online radio page)
+- Songs are not saved twice if a check happens while the same song is still being played
 
 ## Used modules
 
