@@ -25,8 +25,8 @@ def main():
 class Song:
   # Constructor
   def __init__(self, author, title):
-    self.author = author.lower()
-    self.title = title.lower()
+    self.author = author.lower()replace(',', '') # Remove commas because of CSV
+    self.title = title.lower()replace(',', '') # Remove commas because of CSV
 
     if(self.title == 'rockfm'):
       self.author = 'rockfm'
@@ -40,7 +40,7 @@ class Song:
   def save(self):
     currentDate = time.strftime("%d/%m/%Y")
     currentTime = time.strftime("%H:%M")
-    line = self.author + ';' + self.title + ';' + currentDate + ';' + currentTime + '\n'
+    line = self.author + ',' + self.title + ',' + currentDate + ',' + currentTime + '\n'
 
     with open("history.csv", "a") as historyFile:
       historyFile.write(line)
@@ -72,8 +72,8 @@ def getLastSong():
   with open('history.csv', 'r') as historyFile:
     lines = historyFile.read().splitlines()
     lastLine = lines[-1] # Get the last line in the file
-    author = lastLine.split(';')[0]
-    title = lastLine.split(';')[1]
+    author = lastLine.split(',')[0]
+    title = lastLine.split(',')[1]
     lastSong = Song(author, title)
 
 
