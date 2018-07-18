@@ -25,8 +25,8 @@ def main():
 class Song:
   # Constructor
   def __init__(self, author, title):
-    self.author = author.lower()replace(',', '') # Remove commas because of CSV
-    self.title = title.lower()replace(',', '') # Remove commas because of CSV
+    self.author = author.lower().replace(',', '') # Remove commas because of CSV
+    self.title = title.lower().replace(',', '') # Remove commas because of CSV
 
     if(self.title == 'rockfm'):
       self.author = 'rockfm'
