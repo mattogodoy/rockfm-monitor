@@ -2,94 +2,76 @@ import requests
 import time
 import schedule
 import json
-from os import path
 
+
+lastSong = None
 
 # Main program
 def main():
-  mergeSongs() # Run for the first time before scheduling
-  schedule.every(20).minutes.do(mergeSongs) # Configure the schedule
+  getLastSong() # Get the last song from the history file
+  getCurrentSong() # Run for the first time before scheduling
 
-  # Run an infinite loop while checking the schedule
+  schedule.every(20).seconds.do(getCurrentSong) # Configure the schedule
+
+  # Run an infinite loop that checks the schedule
   while 1:
     schedule.run_pending()
     time.sleep(1)
 
 
-# Add the last non-repeated songs to the history
-def mergeSongs():
-  newHistory = []
-  oldHistory = getOldHistory() # Get old history songs
+class Song:
+  # Constructor
+  def __init__(self, author, title):
+    self.author = author.lower()
+    self.title = title.lower()
 
-  print("Checking for the last songs...")
+    if(self.title == 'rockfm'):
+      self.author = 'rockfm'
+      self.title = 'intermission'
 
-  for song in getLastSongs():
-    fullName = song['streamTitle'].lower()
-    newHistory.append(fullName)
+  # Allows to compare different instances of the
+  # same class by it's attributes
+  def __eq__(self, other):
+    return self.__dict__ == other.__dict__
 
-    if fullName not in oldHistory:
-      saveNewSong(fullName)
+  def save(self):
+    currentDate = time.strftime("%d/%m/%Y")
+    currentTime = time.strftime("%H:%M")
+    line = self.author + ',' + self.title + ',' + currentDate + ',' + currentTime + '\n'
 
-  oldHistory = newHistory
-  saveOldHistory(oldHistory)
-  print("Current time: " + time.strftime("%H:%M:%S") + " - Waiting 20 minutes until the next check...")
+    with open("history.csv", "a") as historyFile:
+      historyFile.write(line)
 
-
-# Gets the last 10 songs from the radio.es API
-def getLastSongs():
-  # api-endpoint
-  APIurl = 'https://api.radio.es/info/v2/search/nowplaying'
-
-  # defining a params dict for the parameters to be sent to the API
-  APIparams = {
-    '_': '1531576923971',
-    'apikey': 'df5cadfe49eeaff53727bad8c69b47bdf4519123',
-    'numberoftitles': '10',
-    'station': '14160'
-  }
-
-  # sending get request and saving the response as response object
-  r = requests.get(url = APIurl, params = APIparams)
-
-  # extracting data in json format
-  # data = r.json()
-  data = r.text.encode('utf-8').decode('ascii', 'ignore') # Hack to avoid special characters errors
-  data = json.loads(data)
-
-  data = data[::-1] # Reverse the array so the songs are in descending order
-  return data
-
-# Gets the contents of the old hisory as a list
-def getOldHistory():
-  if path.isfile('old_history.txt'):
-    with open('old_history.txt') as file:
-      lines = [line.rstrip('\n') for line in file]
-
-    return lines
-  else:
-    return []
+    print("Song added to history file.")
 
 
-# Saves the oldHistory list to a file
-def saveOldHistory(songList):
-  oldHistoryFile = open('old_history.txt', 'w')
+# Gets te current playing song
+def getCurrentSong():
+  global lastSong # Obtain access to global variable. No static variables in python 🤷🏻‍
 
-  for song in songList:
-    oldHistoryFile.write(song + '\n')
+  apiUrl = 'http://bo.cope.webtv.flumotion.com/api/active?format=json&podId=78'
+  req = requests.get(apiUrl) # Make API call
+  data = req.json() # Convert results to a JSON object
+  data = json.loads(data['value']) # The valuable data comes inside 'value', and also in JSON format
+
+  currentSong = Song(data['author'], data['title'])
+
+  if(currentSong != lastSong):
+    print("New song playing: ", currentSong.author, ' - ', currentSong.title)
+    currentSong.save()
+    lastSong = currentSong
 
 
-# Appends a new song to the end of the history file
-def saveNewSong(song):
-  print("New song found: " + song)
+# Gets the last song in the history file
+def getLastSong():
+  global lastSong
 
-  artistName = song.split(' - ')[0]
-  songName = song.split(' - ')[1]
-  currentDate = time.strftime("%d/%m/%Y")
-  currentTime = time.strftime("%H:%M:%S")
-  line = artistName + ', ' + songName + ', ' + currentDate + ', ' + currentTime + '\n'
-
-  with open("history.csv", "a") as historyFile:
-    historyFile.write(line)
+  with open('history.csv', 'r') as historyFile:
+    lines = historyFile.read().splitlines()
+    lastLine = lines[-1] # Get the last line in the file
+    author = lastLine.split(',')[0]
+    title = lastLine.split(',')[1]
+    lastSong = Song(author, title)
 
 
 # Run the main program
