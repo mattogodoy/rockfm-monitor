@@ -2,9 +2,12 @@ import requests
 import time
 import schedule
 import json
+import os
 
+os.environ['TZ'] = 'Europe/Madrid' # To fix server's different time zone configuration
 
 lastSong = None
+
 
 # Main program
 def main():
@@ -37,7 +40,7 @@ class Song:
   def save(self):
     currentDate = time.strftime("%d/%m/%Y")
     currentTime = time.strftime("%H:%M")
-    line = self.author + ',' + self.title + ',' + currentDate + ',' + currentTime + '\n'
+    line = self.author + ';' + self.title + ';' + currentDate + ';' + currentTime + '\n'
 
     with open("history.csv", "a") as historyFile:
       historyFile.write(line)
@@ -69,8 +72,8 @@ def getLastSong():
   with open('history.csv', 'r') as historyFile:
     lines = historyFile.read().splitlines()
     lastLine = lines[-1] # Get the last line in the file
-    author = lastLine.split(',')[0]
-    title = lastLine.split(',')[1]
+    author = lastLine.split(';')[0]
+    title = lastLine.split(';')[1]
     lastSong = Song(author, title)
 
 
