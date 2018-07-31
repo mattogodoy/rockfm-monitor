@@ -21,12 +21,23 @@ These modules are required in order for this program to run:
 
 ## Execution
 
-This program is meant to run under **python3**, and you can do so by:
+This program is meant to run under **python3**.
+
+### Monitor
+
+The monitor script runs in the background and captures the songs being played.
 
 `python3 monitor.py`
 
 The songs will be checked every **20** seconds (only if the program is running).
 
-## To-Do
 
-In a near future I'll code a program to get statistics about the artists, songs and their frequency of broadcast.
+### Results
+
+The results script reads the contents of the history file and shows some statistics.
+
+`python3 results.py`
+
+The output will show something like this:
+
+![Results output](img/rockfm.png?raw=true "Results output")
