@@ -60,7 +60,7 @@ sudo apt-get install imagemagick
 
 ### Run periodically
 
-You can send the results via Telegram periodically by setting a `cron` task. For instance, to sent the stats every Monday at 10am:
+You can send the results via Telegram periodically by setting a `cron` task. For instance, to send the stats every Monday at 10am:
 
 `0 10 * * MON /home/matto/dev/rockfm-monitor/telegram.sh`
 
