@@ -55,7 +55,7 @@ def main():
     print(' {: <50} {: ^15} {: ^15}'.format(artist, count, round(count / period, 1)))
 
 def getHistory():
-  with open('history.csv') as f:
+  with open('history.csv', encoding='utf-8') as f:
     content = f.readlines()
 
   content = [x.strip() for x in content] # remove whitespace characters like `\n` at the end of each line
