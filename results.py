@@ -3,7 +3,6 @@ from collections import Counter
 
 
 def main():
-  print('Reading history file...')
   history = getHistory()
   songs = []
   artists = []
@@ -17,8 +16,8 @@ def main():
   period = (eDate - sDate).days
 
   print('\n')
-  print('\tData collected from {0} to {1} ({2} days)'.format(startDate, endDate, period))
-  print('\t{0} total songs'.format(len(history)))
+  print('  Data collected from {0} to {1} ({2} days)'.format(startDate, endDate, period))
+  print('  {0} total songs'.format(len(history)))
   print('\n')
 
   # Create list of songs
