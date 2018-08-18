@@ -41,3 +41,27 @@ The results script reads the contents of the history file and shows some statist
 The output will show something like this:
 
 ![Results output](img/rockfm.png?raw=true "Results output")
+
+## Telegram integration
+
+The script `telegram.sh` converts the results output to an image and sends it as a file via Telegram to the configured User/Group/Channel.
+
+In order to use it, you have to install and configure the `telegram-send` Python module following these steps: https://github.com/rahiel/telegram-send#installation
+
+Also, for the image generation, you'll have to install `Imagemagick` by running the corresponding installation command:
+
+```
+# Mac:
+brew install imagemagick
+
+# Linux:
+sudo apt-get install imagemagick
+```
+
+### Run periodically
+
+You can send the results via Telegram periodically by setting a `cron` task. For instance, to sent the stats every Monday at 10am:
+
+`0 10 * * MON /home/matto/dev/rockfm-monitor/telegram.sh`
+
+(don't forget to updat the path with your own)
