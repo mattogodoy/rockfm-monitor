@@ -53,16 +53,22 @@ def getCurrentSong():
   global lastSong # Obtain access to global variable. No static variables in python 🤷🏻‍
 
   apiUrl = 'http://bo.cope.webtv.flumotion.com/api/active?format=json&podId=78'
-  req = requests.get(apiUrl) # Make API call
-  data = req.json() # Convert results to a JSON object
-  data = json.loads(data['value']) # The valuable data comes inside 'value', and also in JSON format
 
-  currentSong = Song(data['author'], data['title'])
+  # Sometimes the API calls fail, so let's make it crash-proof
+  try:
+    req = requests.get(apiUrl) # Make API call
+    data = req.json() # Convert results to a JSON object
+    data = json.loads(data['value']) # The valuable data comes inside 'value', and also in JSON format
 
-  if(currentSong != lastSong):
-    print("New song playing: ", currentSong.author, ' - ', currentSong.title)
-    currentSong.save()
-    lastSong = currentSong
+    currentSong = Song(data['author'], data['title'])
+
+    if(currentSong != lastSong):
+      print("New song playing: ", currentSong.author, ' - ', currentSong.title)
+      currentSong.save()
+      lastSong = currentSong
+
+  except:
+    print("API call failed. Retrying in a few seconds... ")
 
 
 # Gets the last song in the history file
