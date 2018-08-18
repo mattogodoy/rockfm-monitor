@@ -53,6 +53,9 @@ def main():
   for artist, count in artistsCount[:20]:
     print(' {: <50} {: ^15} {: ^15}'.format(artist, count, round(count / period, 1)))
 
+  print('\n')
+
+
 def getHistory():
   with open('history.csv', encoding='utf-8') as f:
     content = f.readlines()
