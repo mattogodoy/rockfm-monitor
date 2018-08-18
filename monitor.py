@@ -84,4 +84,5 @@ def getLastSong():
 
 
 # Run the main program
-main()
+if __name__ == "__main__":
+  main()

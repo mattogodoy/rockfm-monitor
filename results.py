@@ -21,13 +21,13 @@ def main():
   print('\t{0} total songs'.format(len(history)))
   print('\n')
 
+  # Create list of songs
   for song in history:
-    if(song.split(',')[0] != 'rockfm'):
-      songs.append(song.split(',')[0] + ' - ' + song.split(',')[1])
+    songs.append(song.split(',')[0] + ' - ' + song.split(',')[1])
 
+  # Create list of artists
   for artist in history:
-    if(artist.split(',')[0] != 'rockfm'):
-      artists.append(artist.split(',')[0])
+    artists.append(artist.split(',')[0])
 
   songsCount = Counter(songs) # Counts the repeated items in the list
   songsCount = sorted(songsCount.items(), key=lambda kv: kv[1]) # Sort dictionary by values. Returns a list.
@@ -59,7 +59,9 @@ def getHistory():
     content = f.readlines()
 
   content = [x.strip() for x in content] # remove whitespace characters like `\n` at the end of each line
+  content = [x for x in content if x.split(',')[0] != 'rockfm'] # Remove RockFM's intermissions
   return content
 
 
-main()
+if __name__ == "__main__":
+  main()
